@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Api Helper - Save as CSV</title>
+  <link rel="stylesheet" href="styles-gen.css" />
+  <link rel="stylesheet" href="styles-layout.css" />
+  <link rel="stylesheet" href="styles-input.css" />
+  <link rel="stylesheet" href="styles-btn.css" />
+  <link rel="stylesheet" href="styles-textarea.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div class="group">
+      <div class="tuple">
+        <div class="left">Method</div>
+        <div class="right">
+          <select id="method">
+            <option value="POST">POST</option>
+            <option value="GET">GET</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tuple">
+        <div class="left">URL</div>
+        <div class="right">
+          <input type="text" id="url" name="url" placeholder="https://url.to/data" />
+        </div>
+      </div>
+
+      <div class="tuple">
+        <div class="left">API Key</div>
+        <div class="right">
+          <input type="text" id="api-key" name="api-key" placeholder="1234" />
+        </div>
+      </div>
+    </div>
+
+    <div id="params" class="group">
+      <h3>Body parameters for API call</h3>
+      <button id="add-params" type="button">Add parameter</button>
+      <div class="tuple param">
+        <div class="left"><input class="key" type="text" /></div>
+        <div class="right"><input class="value" type="text" /></div>
+      </div>
+    </div>
+
+    <button id="download" type="button">Download CSV</button>
+
+    <h3>Responses</h3>
+    <textarea id="responses"></textarea>
+    <h3 class="errors">Errors</h3>
+    <textarea id="errors" class="errors"></textarea>
+
+    <script src="jquery.js"></script>
+    <script src="json2csv.js"></script>
+    <script>
+      // Adding html input
+      const addParamInputDiv = () => $('#params').append(`
+        <div class="tuple param">
+          <div class="left"><input class="key" type="text" /></div>
+          <div class="right"><input class="value" type="text" /></div>
+        </div>`);
+
+      // Printing errors
+      const printErrors = (errorObject) => {
+        $('#errors').val(JSON.stringify(errorObject, null, 2));
+      }
+
+      // Downloading
+      const clearTextAreas = () => {
+        $('#errors').val('');
+        $('#responses').val('');
+      }
+
+      const mergeArrayOfObjectsToObject = (accumulator, currentValue, currentIndex, array) => {
+        accumulator
+      }
+
+      const getBodyParams = () => {
+        const buildTuple = (element, index) => {
+          const key = $(element).find('.key').val().trim();
+          const value = $(element).find('.value').val().trim();
+          return (key && value) ? { key, value } : undefined;
+        };
+        const mergeArrayOfObjects = (accumulator, currentValue, currentIndex, array) => (
+          accumulator[currentValue.key] = currentValue.value, accumulator
+        );
+        return $.map($('#params .param'), buildTuple).reduce(mergeArrayOfObjects, {});
+      }
+
+      const makeRequest = () => {
+        const url = $('#url').val().trim();
+        const api_key = $('#api-key').val().trim();
+        const method = $('#method').val().trim();
+        const bodyParams = getBodyParams();
+        const data = api_key && { ...bodyParams, api_key }
+        console.log({ url, api_key, bodyParams, method, data });
+
+        return $.ajax({
+          contentType: 'application/json',
+          method,
+          url,
+          data
+        });
+      };
+
+      const lastSundayOfEachMonths = (year) => {
+        var lastDay = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        var sundays = [];
+        var date, month;
+        if (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) {
+          lastDay[2] = 29;
+        }
+        for (date = new Date(), month = 0; month < 12; month += 1) {
+          date.setFullYear(year, month, lastDay[month]);
+          date.setDate(date.getDate() - date.getDay());
+          // sundays.push(date.toISOString().substring(0, 10));
+          sundays.push(date.getDate());
+        }
+        return sundays;
+      };
+
+      const calculateTimeDiffAt = (date) => {
+        const twoHours = 3600 * 1000 * 2;
+        const threeHours = 3600 * 1000 * 3;
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const lastSundays = lastSundayOfEachMonths(year);
+        const dstBegins = lastSundays[2];
+        const dstEnds = lastSundays[9];
+        if ([11, 12, 1, 2].includes(month))
+          return twoHours;
+        if ([4, 5, 6, 7, 8, 9].includes(month))
+          return threeHours;
+        if (month === 3)
+          return day >= dstBegins ? threeHours : twoHours;
+        if (month === 10)
+          return day >= dstEnds ? twoHours : threeHours;
+      }
+
+      const convertEpochToDatetime = (object) => {
+        Object.keys(object)
+          .forEach(key => {
+            if (object[key] && typeof object[key] === 'object') {
+              convertEpochToDatetime(object[key])
+            } else {
+              if (key.toLowerCase().includes('date') || key.toLowerCase().includes('time')) {
+                if (typeof object[key] === 'number') {
+                  const timeDiff = calculateTimeDiffAt(new Date(object[key]));
+                  console.log({ timeDiff });
+                  const d = new Date(object[key] + timeDiff);
+                  // const yyyy = d.getUTCFullYear();
+                  // const MM = ((d.getUTCMonth() + 1) < 10 && '0') + (d.getUTCMonth() + 1);
+                  // const dd = (d.getUTCDate() < 10 && '0') + d.getUTCDate();
+                  // const HH = (d.getUTCHours() < 10 && '0') + d.getUTCHours();
+                  // const mm = (d.getUTCMinutes() < 10 && '0') + d.getUTCMinutes();
+                  // const ss = (d.getUTCSeconds() < 10 && '0') + d.getUTCSeconds();
+                  // object[key] = `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+                  object[key] = d.toISOString().replace('T', ' ').replace('Z', '').substr(0, 19);
+                }
+              }
+            }
+          });
+        return object;
+      };
+
+      const convertJsonToCsv = (json) => {
+        const opts = {
+          eol: '\r\n',
+          // excelStrings: true,
+          transforms: [
+            json2csv.transforms.flatten(),
+            convertEpochToDatetime
+          ]
+        };
+        const parser = new json2csv.Parser(opts);
+        var csv;
+        if (json instanceof Array) {
+          return parser.parse(json);
+        } else {
+          const arrays = Object.keys(json).filter(key => json[key] instanceof Array).map(key => json[key]);
+          if (arrays.length > 0) {
+            return parser.parse(arrays[0]);
+          }
+        }
+        throw new Error('No arrays found to parse as CSV');
+      }
+
+      async function saveFile(csv) {
+        // (A) CREATE BLOB OBJECT
+        var myBlob = new Blob([csv], { type: 'text/csv' });
+
+        // (B) FILE HANDLER & FILE STREAM
+        const fileHandle = await window.showSaveFilePicker({
+          types: [{
+            description: 'CSV file',
+            accept: { 'text/csv': ['.csv', '.xlsx'] }
+          }],
+          suggestedName: 'data.csv'
+        });
+        const fileStream = await fileHandle.createWritable();
+
+        // (C) WRITE FILE
+        await fileStream.write(myBlob);
+        await fileStream.close();
+      }
+
+      const downloadJsonAndConvertToCsv = (event) => {
+        try {
+          clearTextAreas();
+          // testMethod();
+          makeRequest()
+            .done((data, textStatus, jqXHR) => {
+              $('#responses').val(`Status: ${textStatus}\nBody:\n${JSON.stringify(data, null, 2)}`);
+              const csv = convertJsonToCsv(data);
+              saveFile(csv);
+            })
+            .fail((jqXHR, textStatus, errorThrown) => {
+              const { responseJSON, status, statusText, ...rest } = jqXHR;
+              printErrors({ responseJSON, status, statusText, errorThrown });
+            });
+        } catch (error) {
+          printErrors({ message: error.message, stack: error.stack });
+        }
+      }
+
+      $(function () {
+        $('#add-params').click(addParamInputDiv);
+        $('#download').click(downloadJsonAndConvertToCsv);
+        window.onerror = function (message, filename, linenumber) {
+          printErrors({message, filename, linenumber});
+        }
+      });
+
+      function testMethod() {
+        const data = {
+          book: [
+            {
+              category: 'fiction',
+              author: 'Evelyn Waugh',
+              title: 'Sword of Honour',
+              price: 12.99,
+              publishDate: Date.parse('1999-12-31T22:00Z'),
+              marks: [
+                3,
+                99,
+                89,
+                34,
+                67567
+              ]
+            },
+            {
+              name: 'dasd',
+              category: 'reference',
+              author: 'Nigel Rees',
+              title: 'Sayings of the Century',
+              publishDate: Date.parse('1999-06-31T22:00Z'),
+              reprints: {
+                amount: 3,
+                reprintTime: Date.parse('2019-10-31T22:00Z')
+              },
+              price: 8.95,
+              marks: [
+                3,
+                99,
+                89
+              ]
+            },
+            {
+              category: 'fiction',
+              author: 'Herman Melville',
+              title: 'Moby Dick',
+              isbn: '0-553-21311-3',
+              price: 8.99,
+              publishDate: 920232118000,
+              marks: [
+                3,
+                99,
+                89
+              ]
+            },
+            {
+              category: 'fiction',
+              author: 'J. R. R. Tolkien',
+              title: 'The Lord of the Rings',
+              isbn: '0-395-19395-8',
+              publishDate: 920232118000,
+              price: 22.99,
+              marks: [],
+              reprints: {
+                amount: 3,
+                reprintTime: 1530223200000
+              },
+            }
+          ],
+          success: 'true'
+        }
+        const csv = convertJsonToCsv(data);
+        saveFile(csv);
+      }
+    </script>
+</body>
+
+</html>

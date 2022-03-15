@@ -1,0 +1,26 @@
+input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+input:hover,
+select:hover {
+  outline: none;
+  border: 1px solid #095484;
+  background: #e6eef7;
+}
+select {
+  width: 100%;
+  padding: 7px 0;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background: transparent;
+}
+select,
+option {
+  background: #fff;
+}
+label {
+  text-align: left;
+}

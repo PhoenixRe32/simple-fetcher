@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.lang.String?>
+<VBox alignment="TOP_CENTER"
+      minWidth="600.0"
+      spacing="20.0"
+      fx:controller="com.pittacode.apihelper.ApiHelperController"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints prefWidth="100.0" minWidth="100.0" maxWidth="120.0"
+                               hgrow="SOMETIMES"/>
+            <ColumnConstraints hgrow="SOMETIMES"/>
+        </columnConstraints>
+        <Label text="Method" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <ChoiceBox fx:id="methodField" value="POST" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <String fx:value="POST"/>
+            <String fx:value="GET"/>
+        </ChoiceBox>
+        <Label text="URL" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="urlField" text="https://" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label text="API Key" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <TextField fx:id="apiKeyField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Save Location" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TextField fx:id="saveLocationField" text="results.csv" GridPane.columnIndex="1"
+                   GridPane.rowIndex="3"/>
+    </GridPane>
+
+    <VBox alignment="CENTER">
+        <VBox.margin>
+            <Insets bottom="5.0" top="5.0"/>
+        </VBox.margin>
+        <Label text="Extra parameters for API call" style="-fx-font-size: 18;"/>
+        <Button onAction="#onAddParameterButtonClick" text="Add parameter"/>
+    </VBox>
+
+    <GridPane fx:id="params">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="100.0" minWidth="100.0" maxWidth="120.0"
+                               hgrow="SOMETIMES"/>
+            <ColumnConstraints hgrow="SOMETIMES"/>
+        </columnConstraints>
+        <TextField GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+    </GridPane>
+
+    <Button onAction="#onDownloadButtonClick" text="Download and save as CSV"/>
+
+    <VBox alignment="CENTER_LEFT">
+        <VBox.margin>
+            <Insets bottom="2.0" top="2.0"/>
+        </VBox.margin>
+        <Label text="Response" style="-fx-font-size: 18;"/>
+        <TextArea fx:id="responsesArea" focusTraversable="false" prefHeight="75.0"
+                  editable="false"/>
+    </VBox>
+
+    <VBox alignment="CENTER_LEFT">
+        <VBox.margin>
+            <Insets bottom="2.0" top="2.0"/>
+        </VBox.margin>
+        <Label text="Errors" textFill="RED" style="-fx-font-size: 18;"/>
+        <TextArea fx:id="errorArea" focusTraversable="false" prefHeight="75.0" editable="false"
+                  style="-fx-text-fill: red;"/>
+    </VBox>
+</VBox>
