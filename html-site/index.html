@@ -212,7 +212,6 @@
       const downloadJsonAndConvertToCsv = (event) => {
         try {
           clearTextAreas();
-          // testMethod();
           makeRequest()
             .done((data, textStatus, jqXHR) => {
               $('#responses').val(`Status: ${textStatus}\nBody:\n${JSON.stringify(data, null, 2)}`);
@@ -235,73 +234,6 @@
           printErrors({message, filename, linenumber});
         }
       });
-
-      function testMethod() {
-        const data = {
-          book: [
-            {
-              category: 'fiction',
-              author: 'Evelyn Waugh',
-              title: 'Sword of Honour',
-              price: 12.99,
-              publishDate: Date.parse('1999-12-31T22:00Z'),
-              marks: [
-                3,
-                99,
-                89,
-                34,
-                67567
-              ]
-            },
-            {
-              name: 'dasd',
-              category: 'reference',
-              author: 'Nigel Rees',
-              title: 'Sayings of the Century',
-              publishDate: Date.parse('1999-06-31T22:00Z'),
-              reprints: {
-                amount: 3,
-                reprintTime: Date.parse('2019-10-31T22:00Z')
-              },
-              price: 8.95,
-              marks: [
-                3,
-                99,
-                89
-              ]
-            },
-            {
-              category: 'fiction',
-              author: 'Herman Melville',
-              title: 'Moby Dick',
-              isbn: '0-553-21311-3',
-              price: 8.99,
-              publishDate: 920232118000,
-              marks: [
-                3,
-                99,
-                89
-              ]
-            },
-            {
-              category: 'fiction',
-              author: 'J. R. R. Tolkien',
-              title: 'The Lord of the Rings',
-              isbn: '0-395-19395-8',
-              publishDate: 920232118000,
-              price: 22.99,
-              marks: [],
-              reprints: {
-                amount: 3,
-                reprintTime: 1530223200000
-              },
-            }
-          ],
-          success: 'true'
-        }
-        const csv = convertJsonToCsv(data);
-        saveFile(csv);
-      }
     </script>
 </body>
 
