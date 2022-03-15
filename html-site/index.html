@@ -97,7 +97,6 @@
         const method = $('#method').val().trim();
         const bodyParams = getBodyParams();
         const data = api_key && { ...bodyParams, api_key }
-        console.log({ url, api_key, bodyParams, method, data });
 
         return $.ajax({
           contentType: 'application/json',
@@ -151,7 +150,6 @@
               if (key.toLowerCase().includes('date') || key.toLowerCase().includes('time')) {
                 if (typeof object[key] === 'number') {
                   const timeDiff = calculateTimeDiffAt(new Date(object[key]));
-                  console.log({ timeDiff });
                   const d = new Date(object[key] + timeDiff);
                   // const yyyy = d.getUTCFullYear();
                   // const MM = ((d.getUTCMonth() + 1) < 10 && '0') + (d.getUTCMonth() + 1);
