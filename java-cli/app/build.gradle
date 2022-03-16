@@ -1,0 +1,63 @@
+plugins {
+    id "groovy"
+    id "application"
+    id "org.beryx.jlink" version "2.25.0"
+    id "org.javamodularity.moduleplugin" version "1.8.10"
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    log4jVersion = "2.17.2"
+}
+
+dependencies {
+    implementation("com.jayway.jsonpath:json-path:2.7.0") {
+        exclude group: "com.fasterxml.jackson.core"
+        exclude group: "com.google.gson"
+    }
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2")
+    implementation("com.google.code.gson:gson:2.9.0")
+
+    implementation("org.apache.logging.log4j:log4j-api:${log4jVersion}")
+    implementation("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
+
+
+    testImplementation("org.codehaus.groovy:groovy:3.0.9")
+    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0")
+}
+
+application {
+    mainClass = "com.pittacode.apihelper.Runner"
+    mainModule = "com.pittacode.apihelper"
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
+}
+
+jlink {
+    forceMerge "log4j", "jackson"
+//    options = ["--bind-services"] // makes jre bigger but has everything, good way to test stuff
+    launcher {
+        name = "apihelper"
+        jvmArgs = ["-Dlog4j.configurationFile=./log4j2.xml", "-Dlog4j2.debug=false"]
+    }
+    jpackage {
+        if (org.gradle.internal.os.OperatingSystem.current().windows) {
+            installerOptions += ["--win-per-user-install", "--win-dir-chooser", "--win-menu", "--win-shortcut"]
+            imageOptions += ["--win-console"]
+        }
+    }
+}
+
+tasks.jlink.doLast {
+    copy {
+        from("src/main/resources")
+        into("$buildDir/image/bin")
+    }
+}
