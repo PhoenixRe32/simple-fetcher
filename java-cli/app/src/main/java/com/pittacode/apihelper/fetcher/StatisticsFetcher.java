@@ -17,7 +17,7 @@ public final class StatisticsFetcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsFetcher.class);
 
-    public HttpResponse<String> execute(Arguments arguments) {
+    public HttpResponse<String> fetchFor(Arguments arguments) {
         try {
             return makeRequest(arguments);
         } catch (Exception e) {

@@ -38,8 +38,8 @@ public final class ApiHelper {
 
     private void run(Arguments arguments) {
         final var jsonFile = "%s.json".formatted(arguments.saveLocation());
-        final var csvFile = "%s.csv".formatted(arguments.saveLocation());
-        Optional.of(statisticsFetcher.execute(arguments))
+        final var csvFile = "%s.tsv".formatted(arguments.saveLocation());
+        Optional.of(statisticsFetcher.fetchFor(arguments))
                 .map(HttpResponse::body)
                 .map(response -> fileSaver.write(response, jsonFile))
                 .map(this::convertToCsv)
@@ -52,7 +52,7 @@ public final class ApiHelper {
 
     private void writeCsvFile(String csvFile, JFlat jflat) {
         try {
-            jflat.headerSeparator(".").write2csv(csvFile);
+            jflat.headerSeparator(".").write2csv(csvFile, '\t');
         } catch (Exception e) {
             throw new RuntimeException("Failed to write CSV file " + csvFile, e);
         }
