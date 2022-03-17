@@ -5,6 +5,8 @@ module com.pittacode.apihelper {
     requires java.sql;
     requires com.google.gson;
     requires json.path;
+    requires org.apache.logging.log4j;
+    requires com.fasterxml.jackson.databind;
 
     exports com.pittacode.apihelper;
     exports com.pittacode.apihelper.file;
