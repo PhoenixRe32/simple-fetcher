@@ -34,7 +34,7 @@ public final class StatisticsFetcher {
                 .uri(arguments.uri())
                 .method(arguments.method(), BodyPublishers.ofString(requestJson))
                 .build();
-        LOGGER.debug("{} {} {}", request.method(), request.uri(), request.headers().map());
+        LOGGER.debug("{} {} {}, {}", request.method(), request.uri(), request.headers().map(), requestJson);
         final var response = newHttpClient().send(request, BodyHandlers.ofString());
         return successful(response);
     }

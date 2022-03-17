@@ -13,7 +13,7 @@ public final class FileWriter {
 
     public String write(String content, String saveLocation) {
         try {
-            LOGGER.debug("Writing file {}. Content:\n{}", saveLocation, content);
+            LOGGER.debug("Writing file {}. Content: {}", saveLocation, content);
             Files.writeString(Path.of(saveLocation), content);
             return content;
         } catch (IOException e) {
