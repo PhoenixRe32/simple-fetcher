@@ -10,4 +10,5 @@ module com.pittacode.apihelper {
 
     exports com.pittacode.apihelper;
     exports com.pittacode.apihelper.file;
+    exports com.pittacode.apihelper.json;
 }
