@@ -1,0 +1,59 @@
+{
+  "score": 0.5620561,
+  "show": {
+    "id": 57291,
+    "url": "https://www.tvmaze.com/shows/57291/the-holden-girls-mandy-myrtle",
+    "name": "The Holden Girls: Mandy & Myrtle",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy"
+    ],
+    "status": "Running",
+    "runtime": null,
+    "averageRuntime": 32,
+    "premiered": "2021-09-07",
+    "ended": null,
+    "officialSite": "https://www.channel4.com/programmes/the-holden-girls-mandy-myrtle/",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Tuesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 49,
+    "network": {
+      "id": 41,
+      "name": "E4",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      }
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 409152,
+      "imdb": "tt15371940"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/354/887264.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/354/887264.jpg"
+    },
+    "summary": "<p>Spoof documentary followiing actress and broadcaster Amanda Holden and her grandmother Myrtle, played by Leigh Francis.</p>",
+    "updated": 1632389837,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/57291"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2166477"
+      }
+    }
+  }
+}
