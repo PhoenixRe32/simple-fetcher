@@ -9,6 +9,4 @@ module com.pittacode.apihelper {
     requires com.fasterxml.jackson.databind;
 
     exports com.pittacode.apihelper;
-    exports com.pittacode.apihelper.file;
-    exports com.pittacode.apihelper.json;
 }

@@ -38,6 +38,10 @@ application {
 
 tasks.named("test") {
     useJUnitPlatform()
+
+    moduleOptions {
+        runOnClasspath = true
+    }
 }
 
 jlink {
