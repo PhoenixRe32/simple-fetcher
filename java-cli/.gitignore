@@ -8,6 +8,5 @@ build
 .DS_Store
 
 # output files
-*.json
 *.tsv
 *.csv
