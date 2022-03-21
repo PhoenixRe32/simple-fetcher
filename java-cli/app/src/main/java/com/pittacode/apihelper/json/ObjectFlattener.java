@@ -12,17 +12,18 @@ import static java.util.function.Predicate.not;
 
 public class ObjectFlattener {
 
-    public JsonObject flatten(JsonObject o) {
+    public JsonObject flatten(JsonObject jsonObject) {
         final var flat = new JsonObject();
-        o.entrySet()
-         .stream()
-         .flatMap(jsonObjectField -> toStreamOfEntries(jsonObjectField, ""))
-         .toList()
-         .forEach(e -> flat.add(e.getKey(), e.getValue()));
+        jsonObject.entrySet()
+                  .stream()
+                  .flatMap(field -> toStreamOfEntries(field, ""))
+                  .toList()
+                  .forEach(e -> flat.add(e.getKey(), e.getValue()));
         return flat;
     }
 
-    private Stream<Map.Entry<String, JsonElement>> toStreamOfEntries(Map.Entry<String, JsonElement> field, String prefix) {
+    private Stream<Map.Entry<String, JsonElement>> toStreamOfEntries(Map.Entry<String, JsonElement> field,
+                                                                     String prefix) {
         if (not(object()).test(field)) {
             return Stream.of(new SimpleImmutableEntry<>(prefix + field.getKey(), field.getValue()));
         }
@@ -39,18 +40,6 @@ public class ObjectFlattener {
             return fieldKey + ".";
         }
         return currentPrefix + fieldKey + ".";
-    }
-
-    private Predicate<Map.Entry<String, JsonElement>> primitive() {
-        return e -> e.getValue().isJsonPrimitive();
-    }
-
-    private Predicate<Map.Entry<String, JsonElement>> nil() {
-        return e -> e.getValue().isJsonNull();
-    }
-
-    private Predicate<Map.Entry<String, JsonElement>> array() {
-        return e -> e.getValue().isJsonArray();
     }
 
     private Predicate<Map.Entry<String, JsonElement>> object() {
