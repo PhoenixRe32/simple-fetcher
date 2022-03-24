@@ -5,6 +5,9 @@ plugins {
     id "org.javamodularity.moduleplugin" version "1.8.10"
 }
 
+setGroup("com.pittacode")
+setApplicationName("apihelper")
+
 repositories {
     mavenCentral()
 }
@@ -15,6 +18,9 @@ ext {
 
 dependencies {
     implementation("com.google.code.gson:gson:2.9.0")
+
+    implementation 'info.picocli:picocli:4.6.3'
+    annotationProcessor 'info.picocli:picocli-codegen:4.6.3'
 
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("org.apache.logging.log4j:log4j-api:${log4jVersion}")
@@ -38,6 +44,10 @@ tasks.named("test") {
     moduleOptions {
         runOnClasspath = true
     }
+}
+
+tasks.named("compileJava") {
+    options.compilerArgs += ["-Aproject=${project.group}/${project.applicationName}"]
 }
 
 jlink {
