@@ -2,7 +2,6 @@ package com.pittacode.apihelper;
 
 import com.pittacode.apihelper.argument.ArgumentProcessor;
 import com.pittacode.apihelper.argument.Arguments;
-import com.pittacode.apihelper.csv.JFlat;
 import com.pittacode.apihelper.fetcher.StatisticsFetcher;
 import com.pittacode.apihelper.file.FileWriter;
 import org.slf4j.Logger;
@@ -41,20 +40,6 @@ public final class ApiHelper {
         final var csvFile = "%s.tsv".formatted(arguments.saveLocation());
         Optional.of(statisticsFetcher.fetchFor(arguments))
                 .map(HttpResponse::body)
-                .map(response -> fileSaver.write(response, jsonFile))
-                .map(this::convertToCsv)
-                .ifPresent(jflat -> writeCsvFile(csvFile, jflat));
-    }
-
-    private JFlat convertToCsv(String response) {
-        return new JFlat(response).json2Sheet();
-    }
-
-    private void writeCsvFile(String csvFile, JFlat jflat) {
-        try {
-            jflat.headerSeparator(".").write2csv(csvFile, '\t');
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to write CSV file " + csvFile, e);
-        }
+                .map(response -> fileSaver.write(response, jsonFile));
     }
 }

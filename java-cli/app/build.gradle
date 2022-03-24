@@ -14,16 +14,12 @@ ext {
 }
 
 dependencies {
-    implementation("com.jayway.jsonpath:json-path:2.7.0") {
-        exclude group: "com.fasterxml.jackson.core"
-        exclude group: "com.google.gson"
-    }
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2")
     implementation("com.google.code.gson:gson:2.9.0")
 
+    implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("org.apache.logging.log4j:log4j-api:${log4jVersion}")
     runtimeOnly("org.apache.logging.log4j:log4j-core:${log4jVersion}")
-    annotationProcessor("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+//    annotationProcessor("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
 
 
